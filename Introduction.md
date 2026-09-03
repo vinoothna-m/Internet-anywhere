@@ -22,39 +22,6 @@ In an emergency—such as a vehicle breakdown, a sudden medical situation, or ex
 
 
 
-┌─────────────────────────────────────────────────────────────────────────────────────┐
-
-│                      						THE COVERAGE GAP                       				      │
-
-├─────────────────────────────────────────┬───────────────────────────────────────────┤
-
-│ 			Terrestrial Cellular (5G/4G) 	    │   		Over 70% of Earth Surface  	        │
-
-│     			 \[ City / Towns ]        		│   		 \[ Wilderness / Oceans ] 		      │
-
-│   			Connected Population       		  │      			THE DEAD ZONE           	      │
-
-│  		   ████████████████████             │   	 ░░░░░░░░░░░░░░░░░░░░░░░░░            │
-
-└─────────────────────────────────────────┴───────────────────────────────────────────┘
-
-
-┌─────────────────────────────────────────────────────────────────────────────────────┐
-
-│                      						THE COVERAGE GAP                       				      │
-
-├─────────────────────────────────────────┬───────────────────────────────────────────┤
-
-│ 			Terrestrial Cellular (5G/4G) 	    │   		Over 70% of Earth Surface  	        │
-
-│     			 \[ City / Towns ]        		│   		 \[ Wilderness / Oceans ] 		      │
-
-│   			Connected Population       		  │      			THE DEAD ZONE           	      │
-
-│  		   ████████████████████             │   	 ░░░░░░░░░░░░░░░░░░░░░░░░░            │
-
-└─────────────────────────────────────────┴───────────────────────────────────────────┘
-
 
 **1.2 The Technical Problem: Why Cell Towers Fail Remote Areas:**
 
