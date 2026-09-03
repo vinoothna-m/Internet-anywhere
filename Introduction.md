@@ -22,23 +22,21 @@ In an emergency—such as a vehicle breakdown, a sudden medical situation, or ex
 
 
 
-┌────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────────────────────────┐
 
-│                      						THE COVERAGE GAP                       				│
+│                      						THE COVERAGE GAP                       				      │
 
-├──────────────────────────────┬─────────────────────────────┤
+├─────────────────────────────────────────┬───────────────────────────────────────────┤
 
-│ 			Terrestrial Cellular (5G/4G) 	    │   		Over 70% of Earth Surface  	      │
+│ 			Terrestrial Cellular (5G/4G) 	    │   		Over 70% of Earth Surface  	        │
 
-│     			 \[ City / Towns ]        		    │   		 \[ Wilderness / Oceans ] 		      │
+│     			 \[ City / Towns ]        		│   		 \[ Wilderness / Oceans ] 		      │
 
-│   			Connected Population       		    │      			THE DEAD ZONE           	      │
+│   			Connected Population       		  │      			THE DEAD ZONE           	      │
 
-│  		 ████████████████████          │   	░░░░░░░░░░░░░░░░░░░░░░░░░  │
+│  		   ████████████████████             │   	 ░░░░░░░░░░░░░░░░░░░░░░░░░            │
 
-└──────────────────────────────┴─────────────────────────────┘
-
-
+└─────────────────────────────────────────┴───────────────────────────────────────────┘
 
 
 
@@ -96,9 +94,9 @@ Instead of forcing smartphones to carry bulky, high-power satellite hardware, we
 
 
 
-&#x09;		\[ User Device ] ───► \[ Pocket Gateway ] ───► \[ LEO Satellite ] ───► \[ Global Internet ]
+[ User Device ] ───► \[ Pocket Gateway ] ───► \[ LEO Satellite ] ───► \[ Global Internet ]
 
-&#x20;				(Standard Wi-Fi)     (Intelligent Switch)    (Space Relay)          (Destination)
+(Standard Wi-Fi)     (Intelligent Switch)    (Space Relay)          (Destination)
 
 
 
