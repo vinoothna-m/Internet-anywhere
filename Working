@@ -1,0 +1,117 @@
+# Part 2: Working Mechanism, Architectural Layering, and Data Flow
+
+---
+
+## 2.1 The Architectural Layering Model
+
+To deliver seamless connectivity without requiring hardware updates on end-user devices (smartphones, tablets, IoT sensors), the **Portable Gateway** acts as an intermediary network relay.
+
+The system operates across three distinct operational layers:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      LOCAL ACCESS LAYER                         │
+│   (Smartphones, Laptops, Wearables using Standard Wi-Fi 6 / BT)  │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │ Local IP Traffic
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     INTELLIGENT GATEWAY LAYER                   │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │ Network Switch Engine (Policy & Handover Manager)       │   │
+│   ├────────────────────────────┬────────────────────────────┤   │
+│   │ Terrestrial Transceiver    │  3GPP NTN Satellite Modem  │   │
+│   │  (5G NR Sub-6 GHz / LTE)   │   (Band n255 / n256 RF)    │   │
+│   └────────────────────────────┴────────────────────────────┘   │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │ Uplink / Downlink
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    SPACE & CORE NETWORK LAYER                   │
+│      (LEO Satellites ➔ Earth Gateways ➔ 5G Core Network)        │
+└─────────────────────────────────────────────────────────────────┘
+
+```
+
+1. **Local Access Layer (Short-Range):** The gateway functions as a low-power, high-efficiency Wi-Fi Access Point (AP). It handles local IP assignment, packet aggregation, and authentication for user devices.
+2. **Intelligent Gateway Layer (Core Switch Engine):** The processing brain of the device. It dynamically assesses link quality, power budgets, and terrestrial network availability to decide how packet traffic should exit the device.
+3. **Space & Core Network Layer (Global Backhaul):** The long-range transport layer. It routes packets over standard 5G cell towers when available, or translates them into 3GPP Non-Terrestrial Network (NTN) signals directed at Low Earth Orbit (LEO) satellite constellations.
+
+---
+
+## 2.2 Protocol Stack Mapping: The Universal Protocol Translator
+
+The core engineering breakthrough of this gateway is its **dual-stack protocol translation engine**. The gateway receives standard TCP/IP traffic over IEEE 802.11 (Wi-Fi) from the user's phone, encapsulating and converting it into a 3GPP 5G NR-NTN protocol stack on the satellite interface.
+
+```
+[ User Smartphone ]             [ Portable Gateway Translator ]         [ LEO Satellite System ]
+┌─────────────────┐             ┌─────────────────────────────┐         ┌──────────────────────┐
+│  Applications   │             │                             │         │                      │
+├─────────────────┤             ├──────────────┬──────────────┤         ├──────────────────────┤
+│    TCP / IP     ├────────────►│   TCP / IP   │ SDAP / PDCP  ├────────►│ 5G Core Network Data │
+├─────────────────┤             ├──────────────┼──────────────┤         ├──────────────────────┤
+│  802.11 MAC     ├────────────►│  802.11 MAC  │  RLC / MAC   ├────────►│ 3GPP Satellite MAC   │
+├─────────────────┤             ├──────────────┼──────────────┤         ├──────────────────────┤
+│ Wi-Fi PHY Radio ├────────────►│  Wi-Fi PHY   │ NTN PHY RF   ├────────►│ Space Band n255/n256 │
+└─────────────────┘             └──────────────┴──────────────┘         └──────────────────────┘
+  (Standard Wi-Fi Link)                                                    (Global Space Link)
+
+```
+
+### Protocol Conversion Breakdown:
+
+* **Service Data Adaptation Protocol (SDAP):** Maps user-plane Quality of Service (QoS) flows directly to specific data radio bearers (DRBs). Emergency messages and voice calls receive higher priority queuing over background data.
+* **Packet Data Convergence Protocol (PDCP):** Manages IP header compression (ROHC), ciphering, and packet reordering. In satellite links where latency fluctuates, PDCP prevents packet drops.
+* **Radio Link Control (RLC) & MAC Layers:** Adapted under 3GPP Release 17/18 specs to extend timer thresholds (e.g., `t-Reassembly` and HARQ retransmission timers) to prevent false packet-loss dropouts caused by long space distances.
+* **NTN Physical (PHY) Layer:** Modulates data using OFDMA waveforms tailored for space, incorporating GNSS (GPS) assisted Doppler shift pre-compensation before transmitting up to the satellite.
+
+---
+
+## 2.3 Step-by-Step Packet Data Flow
+
+To understand how a single byte of data travels from a remote wilderness location to a destination server on the internet, we trace the step-by-step lifecycle of an outbound transmission:
+
+```
+[ Smartphone ] ──(1)──► [ Gateway Wi-Fi ] ──(2)──► [ Route Decision ]
+                                                          │
+                                                    (Satellite Link)
+                                                          │
+                                                          ▼
+[ 5G Core Network ] ◄──(5)── [ Ground Station ] ◄──(4)── [ LEO Satellite ] ◄──(3)── [ Gateway RF Beam ]
+
+```
+
+1. **Local Packet Ingestion:** The user sends a text or data request. The smartphone transmits standard IP packets over 2.4 GHz or 5 GHz Wi-Fi to the gateway's local access interface.
+2. **Signal Evaluation & Routing Decision:** The gateway's internal microcontroller checks for terrestrial 5G/4G coverage. If terrestrial signal strength is below the connection threshold (e.g., RSRP < -115 dBm), it engages the space transceiver.
+3. **GNSS Pre-Compensation & Upconversion:** Using internal GPS ephemeris data (satellite location tables), the gateway calculates the exact Doppler frequency shift of the target overhead satellite. It shifts its transmission frequency slightly to offset the satellite's speed, then beams the signal up on 3GPP Band n255/n256.
+4. **Transparent Space Relay ("Bent-Pipe"):** The Low Earth Orbit satellite receives the uplink signal, amplifies it, translates the frequency down, and immediately beams it toward the nearest Earth Ground Station Gateway.
+5. **Core Network Ingestion & Internet Processing:** The Earth station decodes the 3GPP stream and passes it directly into the standard 5G Core Network (5GC), where it reaches the public internet. The return packet follows the exact reverse path in milliseconds.
+
+---
+
+## 2.4 Handover Mechanism: Terrestrial-to-Space Continuity
+
+A major engineering barrier in ubiquitous connectivity is managing **handovers**—ensuring an active video or voice call does not abruptly drop when transitioning between cell towers and space satellites.
+
+```
+                     HANDOVER TIMELINE & DECISION TREE
+
+  Terrestrial Signal (5G)
+  =======================> [ Degradation Zone ] ────► [ Signal Lost ]
+                                    │
+  Handover Trigger                  ▼
+  (PDU Session Transfer)  [ Start Satellite Search ]
+                                    │
+                                    ▼
+  Space Link (NTN)        [ Pre-Sync Ephemeris ] ───► [ Space Session Active ]
+  ================================───────────────────────────────────────────►
+
+```
+
+The gateway manages this using a **Predictive Vertical Handover Protocol**:
+
+* **Soft Degradation Thresholds:** The gateway continuously monitors terrestrial signal quality. When the primary signal degrades past a defined RSSI limit, the gateway wakes the NTN modem from standby mode to begin satellite tracking *before* the ground connection completely drops.
+* **Ephemeris-Driven Satellite Synchronization:** Rather than scanning broad radio frequencies (which drains battery), the gateway reads SIB19 system information blocks and local GPS data to pinpoint the exact time and frequency coordinates of incoming satellites.
+* **PDU Session Continuity:** Utilizing 5G Core Multi-Access PDU (MA-PDU) session protocols, the gateway maintains the same user IP address across both interfaces, enabling continuous data sessions without connection resets.
+
+---
