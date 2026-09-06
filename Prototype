@@ -42,17 +42,21 @@ To build a functional prototype, we choose components that balance low power con
 
 Below is the component blueprint with estimated costs for building a single engineering prototype:
 
-| Component Category                   | Specific Chipset / Module                                 | Functional Role                                                               | Est. Cost (USD) |
+| Component Category                   | Specific Chipset / Module                                                       | Functional Role                                             | Est. Cost (USD) |
 
-| **Main Processing Unit (MCU)** | STMicroelectronics **STM32H7** (ARM Cortex-M7 @ 480 MHz)       | Handles protocol translation, packet queuing, and Doppler shift calculations.     | $12.50 |
-| **Local Wi-Fi Interface**       | Espressif **ESP32-S3-WROOM**                                   | Hosts the local 2.4 GHz / 5 GHz Wi-Fi hotspot for smartphones and wearables.     | $4.20 |
-| **3GPP NTN Satellite Modem** | Quectel **CC660D-LS** (or Sony Altair ALT1350) | Specialized 3GPP Release 17 NTN modem operating on satellite bands (n255/n256). | $38.00 |
-| **GPS / GNSS Module** | u-blox **M10** GNSS Receiver | Provides real-time position and time data to calculate satellite alignment and Doppler pre-compensation. | $9.50 |
-| **Antenna System** | Custom **Phased Array Patch Antenna** | Flat-panel directional antenna array integrated into the casing shell. | $18.00 |
-| **Power Management Integrated Circuit (PMIC)** | Texas Instruments **BQ25713** | Regulates voltage levels, handles USB-C fast charging, and manages battery health. | $3.80 |
-| **Rechargeable Battery** | 3.7V **3,700 mAh Lithium-Polymer** Cell | Compact pouch cell providing 12+ hours of typical standby and intermittent transmit operations. | $8.00 |
-| **Enclosure & Connectors** | Custom 3D-Printed ABS Case + USB-C Port | Weather-sealed casing protecting internal electronics from environmental elements. | $6.00 |
-| **Total Estimated Hardware Cost** |  |  | **~$100.00** |
+| **Main Processing Unit (MCU)**   | STMicroelectronics **STM32H7** (ARM Cortex-M7 @ 480 MHz)       | Handles protocol translation, packet queuing, and Doppler shift calculations.       | $12.50 |
+| **Local Wi-Fi Interface**         | Espressif **ESP32-S3-WROOM**                                   | Hosts the local 2.4 GHz / 5 GHz Wi-Fi hotspot for smartphones and wearables.       | $4.20 |
+| **3GPP NTN Satellite Modem**       | Quectel **CC660D-LS** (or Sony Altair ALT1350)               | Specialized 3GPP Release 17 NTN modem operating on satellite bands (n255/n256).     | $38.00 |
+| **GPS / GNSS Module**               | u-blox **M10** GNSS Receiver                                | Provides real-time position and time data to calculate satellite 
+                                                                                                        alignment and Doppler pre-compensation.                                           | $9.50 |
+| **Antenna System**                   | Custom **Phased Array Patch Antenna**                       | Flat-panel directional antenna array integrated into the casing shell.             | $18.00 |
+| **Power Management 
+Integrated Circuit (PMIC)**             | Texas Instruments **BQ25713**                              | Regulates voltage levels, handles USB-C fast charging, and manages battery health.  | $3.80 |
+| **Rechargeable Battery**             | 3.7V **3,700 mAh Lithium-Polymer** Cell                     | Compact pouch cell providing 12+ hours of typical standby 
+                                                                                                        and intermittent transmit operations.                                               | $8.00 |
+| **Enclosure & Connectors**           | Custom 3D-Printed ABS Case + USB-C Port                     | Weather-sealed casing protecting internal electronics from environmental elements.   | $6.00 |
+
+| **Total Estimated Hardware Cost** |                                                                                                                                                     | **~$100.00** |
 
 ---
 
